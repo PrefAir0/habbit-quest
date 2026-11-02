@@ -6,6 +6,7 @@ import { TasksModule } from './habbits/tasks/tasks.module.js';
 import { UserModule } from './user/user.module.js';
 // import { PrismaModule } from './prisma/prisma.module.js';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true
     }),
     
-    TemplateModule, TasksModule, UserModule],
+    TemplateModule, TasksModule, UserModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })

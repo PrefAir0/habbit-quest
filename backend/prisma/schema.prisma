@@ -13,3 +13,59 @@ datasource db {
   url      = env("DATABASE_URL")
 
 }
+
+model User{
+  id String @id @default(uuid())
+  name String
+  lives Int
+
+  @@map("users")
+}
+
+model Templates{
+  id String @id @default(ulid())
+
+  title String @unique
+
+  description String
+  
+  questId String @map("quest_id")
+  
+  reviews Quests[] @relation("template_reviews")
+
+  completed_count Int @map("completed_count")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("templates")
+
+  @@index([createdAt])
+}
+
+model Quests{
+  id String @id @default(ulid())
+
+  description String
+
+
+  template Templates @relation("template_reviews", fields: [templateID], references: [id], onDelete: Cascade)
+
+  templateID String @map("template_id")
+
+  date DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status questStatus @default(NOTCOMPLATED)
+
+  @@map("quests")
+}
+
+enum questStatus{
+  COMPLEATED
+  NOTCOMPLATED
+  BURN
+
+  @@map("enum_questStatus")
+}
