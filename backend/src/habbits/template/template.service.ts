@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { TemplateDto } from './dto/template.dto.js';
 import { Templates } from '@prisma/client';
@@ -6,6 +6,21 @@ import { Templates } from '@prisma/client';
 @Injectable()
 export class TemplateService {
     constructor(private readonly prismaService: PrismaService){}
+
+
+    async findById(id: string){
+        const template = await this.prismaService.templates.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if (!template) {
+            throw new NotFoundException
+        }
+
+        return template
+    }
 
     async create(dto: TemplateDto): Promise<Templates>{
         const title = dto.title
@@ -20,11 +35,18 @@ export class TemplateService {
                 interval: interval,
                 quest: {create: {}}
             },
-            // include: {
-            //     quest: {}
-            // }
+            include: {
+                quest: {}
+            }
         })
 
         return template
     }
+
+    async findAll(){
+        return await this.prismaService.templates.findMany()
+    }
+
+
+    
 }
