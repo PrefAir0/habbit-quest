@@ -22,43 +22,38 @@ model User{
   @@map("users")
 }
 
-model Templates{
+model Templates {
   id String @id @default(ulid())
-
   title String @unique
-
   description String
-  
-  questId String @map("quest_id")
-  
-  reviews Quests[] @relation("template_reviews")
 
-  completed_count Int @map("completed_count")
+  quest Quests[] @relation("template_quests")
+
+  completed_count Int @default(0) @map("completed_count")
+  interval Int @default(1) @map("days_interval")
+  nextRunAt DateTime @default(now())
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("templates")
-
   @@index([createdAt])
 }
 
-model Quests{
+model Quests {
   id String @id @default(ulid())
-
-  description String
-
-
-  template Templates @relation("template_reviews", fields: [templateID], references: [id], onDelete: Cascade)
 
   templateID String @map("template_id")
 
-  date DateTime
+  template Templates @relation("template_quests", fields: [templateID], references: [id], onDelete: Cascade)
 
+  date DateTime @default(now()) @map("next_run_at")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   status questStatus @default(NOTCOMPLATED)
 
+  @@index([date])
   @@map("quests")
 }
 
