@@ -15,9 +15,15 @@ datasource db {
 }
 
 model User{
-  id String @id @default(uuid())
+  login String @id @unique
   name String
-  lives Int
+  password String
+  lives Int @default(3)
+  
+
+  timezone String @default("UTC")
+
+  templateID Templates[] @relation("template_profile")
 
   @@map("users")
 }
@@ -27,17 +33,24 @@ model Templates {
   title String @unique
   description String
 
+  
+
   quest Quests[] @relation("template_quests")
+
+  userID String
+  user User @relation("template_profile", fields: [userID], references: [login], onDelete: Cascade)
 
   completed_count Int @default(0) @map("completed_count")
   interval Int @default(1) @map("days_interval")
-  nextRunAt DateTime @default(now())
+  nextRunAt DateTime @db.Date @default(now())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  
+
   @@map("templates")
-  @@index([createdAt])
+  @@index([completed_count, createdAt])
 }
 
 model Quests {
@@ -47,7 +60,7 @@ model Quests {
 
   template Templates @relation("template_quests", fields: [templateID], references: [id], onDelete: Cascade)
 
-  date DateTime @default(now()) @map("next_run_at")
+  date DateTime @db.Date @default(now()) @map("next_run_at")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
