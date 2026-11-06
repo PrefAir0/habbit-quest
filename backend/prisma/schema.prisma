@@ -20,7 +20,6 @@ model User{
   password String
   lives Int @default(3)
   
-
   timezone String @default("UTC")
 
   templateID Templates[] @relation("template_profile")

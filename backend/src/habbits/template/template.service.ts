@@ -22,10 +22,11 @@ export class TemplateService {
         return template
     }
 
-    async create(dto: TemplateDto): Promise<Templates>{
+    async create(dto: TemplateDto){
         const title = dto.title
         const description = dto.description
         const interval = dto.interval
+        const userID = dto.userID
 
 
         const template = await this.prismaService.templates.create({
@@ -33,7 +34,9 @@ export class TemplateService {
                 title: title, 
                 description: description,
                 interval: interval,
-                quest: {create: {}}
+                userID: userID,
+                quest: {create: {}},
+                
             },
             include: {
                 quest: {}
