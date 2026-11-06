@@ -7,9 +7,12 @@ import { UserModule } from './user/user.module.js';
 // import { PrismaModule } from './prisma/prisma.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module.js';
+import {ScheduleModule} from '@nestjs/schedule'
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+
     ConfigModule.forRoot({
       isGlobal: true
     }),

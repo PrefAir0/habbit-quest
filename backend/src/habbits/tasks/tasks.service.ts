@@ -21,11 +21,15 @@ export class TasksService {
     }
 
     async findAll(){
-        return await this.prismaService.quests.findMany()
+        return await this.prismaService.quests.findMany({
+            orderBy:{
+                date: 'desc'
+            } 
+        })
     }
 
     async statusReset(id: string, dto: TaskDto){
-        
+
         const task = await this.prismaService.quests.update({
             where: {id},
             data: dto
@@ -34,14 +38,14 @@ export class TasksService {
         if (!task){ throw new NotFoundException}
 
         // if (task.status == "BURN"){
-        //     // await burnTask(task)
+            // await burnTask(task)
         // }
 
         // if (task.status == "COMPLEATED"){
-            
-        // }
         
-        await this.createNextTask(task)
+        // await this.createNextTask(task)
+
+        // }
 
         return task
 
@@ -67,6 +71,8 @@ export class TasksService {
                 date: nextDate
             }
         }) 
+
+        return quest
     }
 
     // async burnTask(task:Quests){
