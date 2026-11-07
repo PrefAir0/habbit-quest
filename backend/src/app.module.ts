@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { TemplateModule } from './habbits/template/template.module.js';
@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module.js';
 import {ScheduleModule} from '@nestjs/schedule'
+import { LoggingMiddleware } from './common/middlewares/loger.middleware.js';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import {ScheduleModule} from '@nestjs/schedule'
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggingMiddleware).forRoutes('*')
+  }
+}

@@ -24,7 +24,7 @@ export class TasksService {
         return await this.prismaService.quests.findMany({
             orderBy:{
                 date: 'desc'
-            } 
+            }
         })
     }
 
