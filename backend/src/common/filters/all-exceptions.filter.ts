@@ -6,7 +6,7 @@ import { timestamp } from "rxjs";
 export class AllExeptionFilter implements ExceptionFilter{
     private readonly logger = new Logger(AllExeptionFilter.name)
 
-    catch(exception: any, host: ArgumentsHost) {
+    catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
 
         const response = ctx.getResponse() as Response
@@ -18,12 +18,12 @@ export class AllExeptionFilter implements ExceptionFilter{
             ? exception.message
             : 'Internal server error'
 
-        this.logger.error(message, exception)
+        this.logger.error(message)
 
         response.status(status).json({
             status,
             message,
-            timestamp: new Date().toISOString,
+            timestamp: new Date().toISOString(),
             path: ctx.getRequest().url
         })
     }
