@@ -15,20 +15,29 @@ export class UserService {
     }
 
     async createAcount(dto: UserDto){
-        try{
-            const user = await this.prismaService.user.create({
-            data:{
-                login: dto.login,
-                name: dto.name,
-                password: dto.password,
-                timezone: dto.timezone
-            }})
 
-            return user
-        }catch(err){
+        const {login, name, password, timezone} = dto
+        
+        const existsLogin = await this.prismaService.user.findUnique({
+            where:{
+                login,
+            },
+        })
 
-            throw new ConflictException("Пользователь уже существует")
+        if (existsLogin){
+            throw new ConflictException('Пользователь с таким логином уже существует')
         }
+
+        const user = await this.prismaService.user.create({
+        data:{
+            login: dto.login,
+            name: dto.name,
+            password: dto.password,
+            timezone: dto.timezone
+        }})
+
+        return user
+
         
     }
 }
