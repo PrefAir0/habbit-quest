@@ -19,8 +19,8 @@ model User{
   login String @unique
   password String
   lives Int @default(3)
-  
-  timezone String @default("UTC")
+
+  timezone String @default("Russia/Moscow")
 
   templateID Templates[] @relation("template_profile")
 
