@@ -15,8 +15,8 @@ datasource db {
 }
 
 model User{
-  login String @id
-  name String
+  id String @id @default(uuid())
+  login String @unique
   password String
   lives Int @default(3)
   
