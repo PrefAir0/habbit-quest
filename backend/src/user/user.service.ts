@@ -8,15 +8,15 @@ export class UserService {
     constructor(private readonly prismaService: PrismaService){}
 
 
-    async findAll(){
-        const users = await this.prismaService.user.findMany({ })
+    // async findAll(){
+    //     const users = await this.prismaService.user.findMany({ })
 
-        return users
-    }
+    //     return users
+    // }
 
     async createAcount(dto: UserDto){
 
-        const {login, name, password, timezone} = dto
+        const {login, password, timezone} = dto
         
         const existsLogin = await this.prismaService.user.findUnique({
             where:{
@@ -30,14 +30,11 @@ export class UserService {
 
         const user = await this.prismaService.user.create({
         data:{
-            login: dto.login,
-            name: dto.name,
-            password: dto.password,
-            timezone: dto.timezone
+            login: login,
+            password: password,
+            timezone: timezone
         }})
 
         return user
-
-        
     }
 }
